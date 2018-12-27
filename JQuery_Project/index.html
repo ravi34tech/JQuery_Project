@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+
+	<script type="text/ecmascript" src="jquery-ui-theme/external/jquery/jquery.js"></script> 
+
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/ecmascript" src="grid/jquery.jqGrid.js"></script>
+    <!-- This is the localization file of the grid controlling messages, labels, etc.-->
+	 <!-- We support more than 40 localizations -->
+    <script type="text/ecmascript" src="grid/grid.locale-en.js"></script>   
+
+	<script type="text/ecmascript" src="jquery-ui-theme/jquery-ui.js"></script>
+	
+    <!-- The link to the CSS that the grid needs -->
+    <link rel="stylesheet" type="text/css" media="screen" href="grid/css/ui.jqgrid.css" /> 
+	
+	<!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
+    <link rel="stylesheet" type="text/css" media="screen" href="jquery-ui-theme/jquery-ui.css" /> 
+	
+	
+	
+	<style>
+		label{			 
+			display: block;
+			float: left;
+			width: 150px;
+		}
+	</style>
+	
+    <meta charset="utf-8" />
+    <title>jqGrid Loading Data - JSON Live</title>
+</head>
+<body>
+
+<div id="tabs">
+    <ul>
+		<li><a href="#tabs-1">First</a></li>
+		<li><a href="#tabs-2">Second</a></li>
+		<li><a href="#tabs-3">Third</a></li>
+	</ul>
+  <div id="tabs-1">
+    <p> 
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div> 
+	</p>
+	
+	<div id="deleteDialog" title="Delete Record">
+		<p> Are you sure you want to delete record... ?
+			Value is : <span id="VAL" />
+		</p>	
+	</div>
+
+
+  </div>
+  	<div id="tabs-2">
+		<h2 class="demoHeaders">Student Information</h2>
+		<div id="accordion">
+		<form>
+			<h3>Basic Details</h3>				
+					<label for="name">Name </label> <input type="text" name="name" /> <br /> <br />
+					<label for="gender">Gender </label>
+					<select  name="gender" >
+						<option>Select</option>
+						<option>Male</option>
+						<option>Female</option>			
+					</select> <br/> <br />
+					<label for="insurance">Insurance</label> 
+					<input type="checkbox" name="insurance" id="insurance"> <br /> <br /> 
+					<label for="dob">Date Of Birth </label>
+					<input type="text" name="dob" id="datepicker" > <br /> <br />				
+			<!--		<button class="ui-button ui-corner-all ui-widget">Save</button> -->
+				
+			<h3>Address Details</h3>				
+					<label for="address">Address</label> <input type="text" name="address" /> <br /> <br />
+					<label for="city">City</label> <input type="text" name="city" /> <br /> <br />
+					<label for="state">State </label>
+					<select  name="state" >
+						<option>Select</option>
+						<option>Andhra</option>
+						<option>Tamilnadu</option>			
+						<option>Karnataka</option>			
+					</select> <br/> <br />
+					<label for="country">Country</label>
+					<input type="text" name="country" > <br /> <br />
+									
+			<h3>Personal Details</h3>
+			<div> Hai...</div>  <br/> <br/>
+			
+			<button class="ui-button ui-corner-all ui-widget">Save</button>
+		</form>
+		</div>
+	</div>
+	
+	<div id="tabs-3">
+	
+		<div class="ui-widget">
+		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+			<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+			<strong>Hey!</strong> Sample ui-state-highlight style.</p>
+		</div>
+		</div>	
+		
+		<div class="ui-widget">
+			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+				<strong>Alert:</strong> Sample ui-state-error style.</p>
+			</div>
+		</div>
+	</div>
+<!--	
+	<h2 class="demoHeaders">Student Information</h2>
+		<div id="accordion">
+			<h3>Basic Details</h3>
+			<div>
+				<form>
+					<label for="name">Name </label> <input type="text" name="name" /> <br /> <br />
+					<label for="gender">Gender </label>
+					<select  name="gender" >
+						<option>Select</option>
+						<option>Male</option>
+						<option>Female</option>			
+					</select> <br/> <br />
+					<label for="insurance">Insurance</label> 
+					<input type="checkbox" name="insurance" id="insurance"> <br /> <br /> 
+					<label for="dob">Date Of Birth </label>
+					<input type="text" name="dob" id="datepicker" > <br /> <br />				
+					<button class="ui-button ui-corner-all ui-widget">Save</button>
+				</form>
+			</div>
+			<h3>Address Details</h3>
+			<div>
+				<form>
+					<label for="address">Address</label> <input type="text" name="address" /> <br /> <br />
+					<label for="city">City</label> <input type="text" name="city" /> <br /> <br />
+					<label for="state">State </label>
+					<select  name="state" >
+						<option>Select</option>
+						<option>Andhra</option>
+						<option>Tamilnadu</option>			
+						<option>Karnataka</option>			
+					</select> <br/> <br />
+					<label for="country">Country</label>
+					<input type="text" name="country" > <br /> <br />
+					<button class="ui-button ui-corner-all ui-widget">Save</button>
+				</form>
+			</div>
+			
+			<h3>Personal Details</h3>
+			<div> Hai...</div>
+		</div>
+	-->
+</div>
+
+
+	
+
+    <script type="text/javascript"> 	
+		var dele = "";
+		
+		function openDeleteDialog(val){
+			$( "#deleteDialog" ).dialog( "open" );
+			$("#VAL").html(val);	
+			dele = val;			
+		}
+		
+		function deleteRecord(){
+			$( "#deleteDialog" ).dialog( "close" );
+			alert("delete successfully with val : "+dele);
+		}
+	 
+        $(document).ready(function () {
+			$( "#tabs" ).tabs();
+			
+	//		$("#accordion").accordion();
+			
+			$( "#datepicker" ).datepicker({
+				inline: true
+			});
+			
+			
+			$("#deleteDialog").dialog({
+				autoOpen: false,
+				width: 400,
+				buttons: [
+					{
+						text: "Ok",
+						click: function() {
+							deleteRecord();
+						}
+					},
+					{
+						text: "Cancel",
+						click: function() {
+							$(this).dialog( "close" );
+						}
+					}
+				]
+			
+			});
+
+			
+            $("#jqGrid").jqGrid({
+                colModel: [
+                    {
+						label: 'Title',
+                        name: 'Title',
+                        width: 150,
+                        formatter: formatTitle
+                    },
+                    {
+						label: 'Link',
+                        name: 'Link',
+                        width: 80,
+                        formatter: formatLink
+                    },
+                    {
+						label: 'View Count',
+                        name: 'ViewCount',
+                        width: 35,
+						sorttype:'integer',
+						formatter: 'number',
+						align: 'right'
+                    },
+                    {
+						label: 'Answer Count',
+                        name: 'AnswerCount',
+                        width: 25
+                    },{
+						label: 'Action',
+                        name: 'ViewCount',
+                        width: 30,
+						formatter: actionLink
+                    }
+                ],
+
+                viewrecords: true, // show the current page, data rang and total records on the toolbar
+                width: 880,
+                height: 260,
+                rowNum: 10,
+				datatype: 'local',
+                pager: "#jqGridPager",
+				caption: "JqGrid Example..."
+            });
+
+            function fetchGridData() {
+                
+                var gridArrayData = [];
+				// show loading message
+				$("#jqGrid")[0].grid.beginReq();
+                $.ajax({
+                    url: "http://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged=jqgrid&site=stackoverflow",
+                    success: function (result) {
+                        for (var i = 0; i < result.items.length; i++) {
+                            var item = result.items[i];
+                            gridArrayData.push({
+                                Title: item.title,
+                                Link: item.link,
+                                CreationDate: item.creation_date,
+                                ViewCount: item.view_count,
+                                AnswerCount: item.answer_count
+                            });                            
+                        }
+						// set the new data
+						$("#jqGrid").jqGrid('setGridParam', { data: gridArrayData});
+						// hide the show message
+						$("#jqGrid")[0].grid.endReq();
+						// refresh the grid
+						$("#jqGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+
+            function formatTitle(cellValue, options, rowObject) {
+                return cellValue.substring(0, 50) + "...";
+            };
+
+            function formatLink(cellValue, options, rowObject) {
+                return "<a href='" + cellValue + "'>" + cellValue.substring(0, 25) + "..." + "</a>";
+            };
+			
+			
+			function actionLink(cellValue, options, rowObject) {
+				return '<div><span class="ui-icon ui-icon-pencil" title="Edit"></span> &nbsp;&nbsp;<span class="ui-icon ui-icon-trash" title="Delete" onclick="openDeleteDialog('+cellValue+');"></span><div>';
+			}
+			
+			fetchGridData();		            
+
+        });
+
+    </script>
+
+    
+</body>
+</html>
