@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- The jQuery library is a prerequisite for all jqSuite products -->
+
+	<script type="text/ecmascript" src="required/jquery.js"></script> 
+
+    <!-- This is the Javascript file of jqGrid -->   
+    <script type="text/ecmascript" src="required/jquery.jqGrid.js"></script>
+    <!-- This is the localization file of the grid controlling messages, labels, etc.-->
+	 <!-- We support more than 40 localizations -->
+    <script type="text/ecmascript" src="required/grid.locale-en.js"></script>   
+
+	<script type="text/ecmascript" src="required/jquery-ui.js"></script>
+	
+    <!-- The link to the CSS that the grid needs -->
+    <link rel="stylesheet" type="text/css" media="screen" href="required/ui.jqgrid.css" /> 
+	
+	<!-- A link to a jQuery UI ThemeRoller theme, more than 22 built-in and many more custom -->
+    <link rel="stylesheet" type="text/css" media="screen" href="required/jquery-ui.css" /> 
+	
+	
+	
+	<style>
+		body{
+			font-family: "Trebuchet MS", sans-serif;
+			margin: 50px;
+		}
+		select {
+			width: 200px;
+		}
+		label{			 
+			display: block;
+			float: left;
+			width: 150px;
+		}
+	</style>
+	
+    <meta charset="utf-8" />
+    <title>jqGrid Loading Data - JSON Live</title>
+</head>
+<body>
+
+<div id="GRID_DIV">
+	<table id="jqGrid"></table>
+    <div id="jqGridPager"></div> 
+</div>
+
+<div id="DELETE_DILOG" title="Delete Record">
+	<p> Are you sure you want to delete record... ?
+		Value is : <span id="VAL" />
+	</p>	
+</div>
+
+
+    <script type="text/javascript"> 	
+		var dele = "";
+		
+		function openDeleteDialog(val){
+			$( "#DELETE_DILOG" ).dialog( "open" );
+			$("#VAL").html(val);	
+			dele = val;			
+		}
+		
+		function deleteRecord(){
+			$( "#DELETE_DILOG" ).dialog( "close" );
+			alert("delete successfully with val : "+dele);
+		}
+	 
+        $(document).ready(function () {
+					
+			$("#DELETE_DILOG").dialog({
+				autoOpen: false,
+				width: 400,
+				buttons: [
+					{
+						text: "Ok",
+						click: function() {
+							deleteRecord();
+						}
+					},
+					{
+						text: "Cancel",
+						click: function() {
+							$(this).dialog( "close" );
+						}
+					}
+				]
+			
+			});
+
+			
+            $("#jqGrid").jqGrid({
+                colModel: [
+                    {
+						label: 'Title',
+                        name: 'Title',
+                        width: 150,
+                        formatter: formatTitle
+                    },
+                    {
+						label: 'Link',
+                        name: 'Link',
+                        width: 80,
+                        formatter: formatLink
+                    },
+                    {
+						label: 'View Count',
+                        name: 'ViewCount',
+                        width: 35,
+						sorttype:'integer',
+						formatter: 'number',
+						align: 'right'
+                    },
+                    {
+						label: 'Answer Count',
+                        name: 'AnswerCount',
+                        width: 25
+                    },{
+						label: 'Action',
+                        name: 'ViewCount',
+                        width: 30,
+						formatter: actionLink
+                    }
+                ],
+
+                viewrecords: true, // show the current page, data rang and total records on the toolbar
+                width: 880,
+                height: 260,
+                rowNum: 10,
+				datatype: 'local',
+                pager: "#jqGridPager",
+				caption: "JqGrid Example..."
+            });
+
+            function fetchGridData() {
+                
+                var gridArrayData = [];
+				// show loading message
+				$("#jqGrid")[0].grid.beginReq();
+                $.ajax({
+                    url: "http://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged=jqgrid&site=stackoverflow",
+                    success: function (result) {
+                        for (var i = 0; i < result.items.length; i++) {
+                            var item = result.items[i];
+                            gridArrayData.push({
+                                Title: item.title,
+                                Link: item.link,
+                                CreationDate: item.creation_date,
+                                ViewCount: item.view_count,
+                                AnswerCount: item.answer_count
+                            });                            
+                        }
+						// set the new data
+						$("#jqGrid").jqGrid('setGridParam', { data: gridArrayData});
+						// hide the show message
+						$("#jqGrid")[0].grid.endReq();
+						// refresh the grid
+						$("#jqGrid").trigger('reloadGrid');
+                    }
+                });
+            }
+
+            function formatTitle(cellValue, options, rowObject) {
+                return cellValue.substring(0, 50) + "...";
+            };
+
+            function formatLink(cellValue, options, rowObject) {
+                return "<a href='" + cellValue + "'>" + cellValue.substring(0, 25) + "..." + "</a>";
+            };
+			
+			
+			function actionLink(cellValue, options, rowObject) {
+				return '<div><span class="ui-icon ui-icon-pencil" title="Edit"></span> &nbsp;&nbsp;<span class="ui-icon ui-icon-trash" title="Delete" onclick="openDeleteDialog('+cellValue+');"></span><div>';
+			}
+			
+			fetchGridData();		            
+
+        });
+
+    </script>
+
+    
+</body>
+</html>
