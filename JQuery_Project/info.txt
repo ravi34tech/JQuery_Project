@@ -1,0 +1,6 @@
+
+https://www.w3schools.com/bootstrap/bootstrap_ref_js_alert.asp
+https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_scrollspy&stacked=h
+https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_tab_events2&stacked=h
+https://www.w3schools.com/bootstrap/bootstrap_forms_inputs2.asp
+https://www.w3schools.com/bootstrap/bootstrap_media_objects.asp
