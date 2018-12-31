@@ -4,3 +4,5 @@ https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_scrollspy&st
 https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_tab_events2&stacked=h
 https://www.w3schools.com/bootstrap/bootstrap_forms_inputs2.asp
 https://www.w3schools.com/bootstrap/bootstrap_media_objects.asp
+
+http://www.java2s.com/Code/HTMLCSS/Form/labelwidth100px.htm
